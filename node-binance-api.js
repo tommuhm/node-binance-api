@@ -511,7 +511,7 @@ let api = function Binance() {
         } else if (type === 'listStatus') {
             if (Binance.options.list_status_callback) Binance.options.list_status_callback(data);
         } else if (type === 'outboundAccountPosition') {
-            if (Binance.options.changed_balances_callback) Binance.options.execution_callback(data);
+            if (Binance.options.changed_balances_callback) Binance.options.changed_balances_callback(data);
         } else {
             Binance.options.log('Unexpected userData: ' + type);
         }
