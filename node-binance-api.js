@@ -510,6 +510,8 @@ let api = function Binance() {
             if (Binance.options.execution_callback) Binance.options.execution_callback(data);
         } else if (type === 'listStatus') {
             if (Binance.options.list_status_callback) Binance.options.list_status_callback(data);
+        } else if (type === 'outboundAccountPosition') {
+            if (Binance.options.changed_balances_callback) Binance.options.execution_callback(data);
         } else {
             Binance.options.log('Unexpected userData: ' + type);
         }
@@ -1651,9 +1653,12 @@ let api = function Binance() {
             * @param {function} callback - the callback function
             * @param {function} execution_callback - optional execution callback
             * @param {function} subscribed_callback - subscription callback
+            * @param {function} list_status_callback - optional list status callback
+            * @param {function} changed_balances_callback - optional changed balances callback
             * @return {undefined}
             */
-            userData: function userData(callback, execution_callback = false, subscribed_callback = false, list_status_callback = false) {
+            userData: function userData(callback, execution_callback = false, subscribed_callback = false,
+                                        list_status_callback = false, changed_balances_callback = false) {
                 let reconnect = function () {
                     if (Binance.options.reconnect) userData(callback, execution_callback, subscribed_callback);
                 };
@@ -1672,6 +1677,7 @@ let api = function Binance() {
                     Binance.options.balance_callback = callback;
                     Binance.options.execution_callback = execution_callback;
                     Binance.options.list_status_callback = list_status_callback;
+                    Binance.options.changed_balances_callback = changed_balances_callback;
                     const subscription = subscribe(Binance.options.listenKey, userDataHandler, reconnect);
                     if (subscribed_callback) subscribed_callback(subscription.endpoint);
                 }, 'POST');
